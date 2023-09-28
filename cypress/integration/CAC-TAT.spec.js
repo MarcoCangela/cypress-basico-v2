@@ -72,4 +72,15 @@ describe('Central de Atendimento ao Cliente TAT - Casos de Testes e execucoes', 
         cy.get('.success').should('be.visible')
    })
 
+   it('Using element selector for select element with the written text', () => {
+    cy.get('#product').select('YouTube').should('have.value','youtube')
+   })
+
+   it('Using element selector for select element with the value', () => {
+    cy.get('#product').select('mentoria').should('have.value','mentoria')
+   })
+
+   it.only('Using element selector for select element with the value', () => {
+    cy.get('#product').select(2).should('have.value','cursos')
+   })
 })
