@@ -80,7 +80,26 @@ describe('Central de Atendimento ao Cliente TAT - Casos de Testes e execucoes', 
     cy.get('#product').select('mentoria').should('have.value','mentoria')
    })
 
-   it.only('Using element selector for select element with the value', () => {
+   it('Using element selector for select element with the value', () => {
     cy.get('#product').select(2).should('have.value','cursos')
    })
+
+   it('Validating the radio buttons on the webpage, selectin the feedback', () => {
+    cy.get('input[type="radio"][value="feedback"]').check().should('have.value','feedback')
+   })
+
+   it('Validate each type of feedback', () =>  {
+    cy.get('input[type="radio"]').should('have.length', 3).
+    each( ($radio) => {
+        cy.wrap($radio).check()
+        cy.wrap($radio).should('be.checked')
+    })
+   })
+
+   it.only('Check all checkboxes and unchecks the last', () => {
+    cy.get('input[type="checkbox"]').check()
+    .last()
+    .uncheck()
+    .should('not.be.checked')
+})
 })
