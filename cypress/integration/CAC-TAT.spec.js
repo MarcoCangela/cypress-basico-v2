@@ -43,7 +43,7 @@ describe('Central de Atendimento ao Cliente TAT - Casos de Testes e execucoes', 
     cy.get('input[id="firstName"]').should('be.visible').type('Marco').should('have.value', 'Marco')
     cy.get('input[id="lastName"]').should('be.visible').type('Garujo').should('have.value', 'Garujo')
     cy.get('input[id="email"]').type('MarcoCangela@live.com')
-    cy.get('#phone-checkbox').click()
+    cy.get('#phone-checkbox').check()
     cy.get('#open-text-area').type('testing')
     cy.get('button[type=submit]').click()
     
@@ -96,10 +96,49 @@ describe('Central de Atendimento ao Cliente TAT - Casos de Testes e execucoes', 
     })
    })
 
-   it.only('Check all checkboxes and unchecks the last', () => {
+   it('Check all checkboxes and unchecks the last', () => {
     cy.get('input[type="checkbox"]').check()
+    .should('be.checked')
     .last()
     .uncheck()
     .should('not.be.checked')
-})
+    })
+    
+    it('Uploading files via Cypress', () => {
+        cy.get('input[type="file"]').
+        should('not.have.value').
+        selectFile('cypress/fixtures/example.json').
+        should( ($input) => {
+            expect($input[0].files[0].name).to.equal('example.json')
+        })
+    })
+
+    it('Emulating drag and drop when selecting a file', () => {
+        cy.get('input[type="file"]').
+        should('not.have.value').
+        selectFile('cypress/fixtures/example.json', {action: 'drag-drop'}).
+        should( ($input) => {
+            expect($input[0].files[0].name).to.equal('example.json')
+        })
+    })
+    
+    it('Selecting a file and using a feature given the feature', () => {
+        cy.fixture('example.json').as('sampleFile')
+        cy.get('input[type="file"]').
+        selectFile('@sampleFile').
+        should( ($input) => {
+            expect($input[0].files[0].name).to.equal('example.json')
+        })
+    })
+
+    it('Validating privacy policy on new tab', () => {
+        cy.get('#privacy a').
+        should('have.attr', 'target', '_blank') 
+    })
+
+    it('Access privacy policy and remove the target to a new pagr then clicking on link', () => {
+        cy.get('#privacy a').invoke('removeAttr', 'target').click()
+        cy.contains('Talking About Testing').should('be.visible')
+    })
+   
 })
